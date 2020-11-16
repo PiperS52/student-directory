@@ -186,7 +186,12 @@ def try_load_students()
     exit # quit the program
   end 
 end 
-    
+
+def my_code
+  print File.read(__FILE__)
+end 
+
+my_code
     
 try_load_students
-interactive_menu 
+interactive_menu
