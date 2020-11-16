@@ -6,9 +6,9 @@ def input_students
   #students = []
   
   puts "Name?"
-  name = gets.chomp
+  name = STDIN.gets.chomp
   puts "Cohort?"
-  cohort = gets.chomp
+  cohort = STDIN.gets.chomp
   while !name.empty? do
     if cohort.empty?
       cohort = "Jan"
@@ -20,12 +20,12 @@ def input_students
         puts "Now we have 1 student"
       end 
       puts "Another name?"
-      name = gets.chomp
+      name = STDIN.gets.chomp
       if name.empty?
         break
       else
         puts "Cohort?"
-        cohort = gets.chomp
+        cohort = STDIN.gets.chomp
       end 
     end 
   end 
@@ -47,7 +47,7 @@ end
 
 def print_by_cohort # print selected cohort - could be added as option to print_menu and show_students
   puts "Which cohort to display?"
-  co_todisp = gets.chomp
+  co_todisp = STDIN.gets.chomp
   @students.select! do |student|
     if student[:cohort] == co_todisp
       puts "#{student[:name]} (#{student[:cohort]} cohort)"
@@ -90,9 +90,11 @@ def process(selection)
     show_students
   when "3"
     save_students
+    puts "\n#{@students.count} students now saved in the directory\n\n"
   when "4"
     load_students 
   when "9"
+    puts "\nProgram successfully exited"
     exit 
   else
     puts "I don't know what you mean, try again"
@@ -111,8 +113,8 @@ def save_students
   file.close 
 end 
 
-def load_students 
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line| 
     name, cohort = line.chomp.split(",")
     @students << {name: name, cohort: cohort}
@@ -128,8 +130,23 @@ def interactive_menu
     print_menu 
     # 2. Read the input and save it to a variable
     # 3. Do what the user has asked 
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
+  end 
+end 
+
+def try_load_students()
+  filename = ARGV.first # 1st argument from the command line
+  filename ||= "students.csv"
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}\n\n"
+  else # if it doesn't exist
+    puts "Sorry #{filename} doesn't exist."
+    exit # quit the program
   end 
 end 
     
+    
+try_load_students
 interactive_menu 
