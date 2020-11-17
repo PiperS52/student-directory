@@ -96,6 +96,7 @@ def process(selection)
     load_students 
   when "9"
     puts "\nProgram successfully exited"
+    my_code
     exit 
   else
     puts "I don't know what you mean, try again"
@@ -191,7 +192,6 @@ def my_code
   print File.read(__FILE__)
 end 
 
-my_code
-    
+
 try_load_students
 interactive_menu
